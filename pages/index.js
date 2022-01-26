@@ -1,34 +1,7 @@
 import appConfig from '../config.json';
 import { Box, Button, Text, TextField, Image } from '@skynexui/components'; 
-
-function GlobalStyle() {
-    return (
-      <style global jsx>{`
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-          list-style: none;
-        }
-        body {
-          font-family: 'Open Sans', sans-serif;
-        }
-        /* App fit Height */ 
-        html, body, #__next {
-          min-height: 100vh;
-          display: flex;
-          flex: 1;
-        }
-        #__next {
-          flex: 1;
-        }
-        #__next > * {
-          flex: 1;
-        }
-        /* ./App fit Height */ 
-      `}</style>
-    );
-  }
+import { useRouter } from 'next/router'
+import React from 'react';
   
 
 function Titulo(propriedades){
@@ -60,11 +33,15 @@ function Titulo(propriedades){
 export default HomePage*/
 
 export default function PaginaInicial() {
-  const username = 'marcosbauab';
+  //const username = 'marcosbauab';
+
+  //state, ela retorna um array com 2 posições, por isso a desestruturação
+  const [username, setUsername] = React.useState()
+  //os uses... são hooks
+  const router = useRouter()
 
   return (
     <>
-      <GlobalStyle />
       <Box
         styleSheet={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -91,6 +68,11 @@ export default function PaginaInicial() {
           {/* Formulário */}
           <Box
             as="form"
+            onSubmit={function (event){
+                event.preventDefault()
+
+                router.push("/chat")
+            }}
             styleSheet={{
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
               width: { xs: '100%', sm: '50%' }, textAlign: 'center', marginBottom: '32px',
@@ -102,6 +84,17 @@ export default function PaginaInicial() {
             </Text>
 
             <TextField
+              onChange={function handler(event){
+                  //valor da variável
+                  const user = event.target.value
+
+                  if(user.length > 2){
+                      //seta o novo user
+                      setUsername(user)
+                  }
+
+              }}
+              placeholder='Digite seu nome no Github...'
               fullWidth
               textFieldColors={{
                 neutral: {
@@ -112,6 +105,18 @@ export default function PaginaInicial() {
                 },
               }}
             />
+
+            {/*<input 
+              type="text"
+              value={username}
+              onChange={function handler(event){
+                  //valor da variável
+                  const user = event.target.value
+                  //seta o novo user
+                  setUsername(user)
+              }}
+            />*/}
+
             <Button
               type='submit'
               label='Entrar'
