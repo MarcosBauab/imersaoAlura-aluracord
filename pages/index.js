@@ -2,6 +2,7 @@ import appConfig from '../config.json';
 import { Box, Button, Text, TextField, Image } from '@skynexui/components'; 
 import { useRouter } from 'next/router'
 import React from 'react';
+import imagem from '../public/usuarios.jpg'
   
 
 function Titulo(propriedades){
@@ -36,7 +37,7 @@ export default function PaginaInicial() {
   //const username = 'marcosbauab';
 
   //state, ela retorna um array com 2 posições, por isso a desestruturação
-  const [username, setUsername] = React.useState()
+  const [username, setUsername] = React.useState('')
   //os uses... são hooks
   const router = useRouter()
 
@@ -70,8 +71,8 @@ export default function PaginaInicial() {
             as="form"
             onSubmit={function (event){
                 event.preventDefault()
-
-                router.push("/chat")
+                //envia pro chat com uma informação de username da pessoa para pegar lá
+                router.push(`/chat?user=${username}`)
             }}
             styleSheet={{
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
@@ -82,17 +83,17 @@ export default function PaginaInicial() {
             <Text variant="body3" styleSheet={{ marginBottom: '32px', color: appConfig.theme.colors.neutrals[300] }}>
               {appConfig.name}
             </Text>
-
+            {/*<a href="https://br.freepik.com/fotos-vetores-gratis/pessoas">Pessoas vetor criado por studiogstock - br.freepik.com</a>*/}
             <TextField
               onChange={function handler(event){
                   //valor da variável
                   const user = event.target.value
-
                   if(user.length > 2){
                       //seta o novo user
                       setUsername(user)
+                  } else {
+                      setUsername('')
                   }
-
               }}
               placeholder='Digite seu nome no Github...'
               fullWidth
@@ -146,14 +147,19 @@ export default function PaginaInicial() {
               borderRadius: '10px',
               flex: 1,
               minHeight: '240px',
+              overflow: 'hidden',
             }}
           >
+            
             <Image
               styleSheet={{
+                display: 'block',
+                height: '166px',
                 borderRadius: '50%',
                 marginBottom: '16px',
+                width: '250%',
               }}
-              src={`https://github.com/${username}.png`}
+              src={username.length > 2 ? `https://github.com/${username}.png` : imagem.src}
             />
             <Text
               variant="body4"

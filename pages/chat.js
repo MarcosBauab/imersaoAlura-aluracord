@@ -1,24 +1,66 @@
 import { Box, Text, TextField, Image, Button } from '@skynexui/components';
 import React from 'react';
 import appConfig from '../config.json';
+import { createClient } from '@supabase/supabase-js'
+import { useRouter } from 'next/router';
+import Sticker from '../src/components/Sticker'
+
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzQxNDgwOSwiZXhwIjoxOTU4OTkwODA5fQ.9etS6c0i8z_qOgBcNIBBD5E9UmiXHYpTSzEanR6UMks'
+const SUPABASE_URL = 'https://mdgilhijonzeeitkftgw.supabase.co'
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
+
+
 
 export default function ChatPage() {
     // Sua lógica vai aqui
-    const [mensagem, setMensagem] = React.useState()
-    const [lista, setLista] = React.useState([])
-    // ./Sua lógica vai aqui
+    const [mensagem, setMensagem] = React.useState('')
+    const [lista, setLista] = React.useState([
+        /*{
+            id: 1,
+            de: 'marcosbauab',
+            texto: ':sticker: https://www.alura.com.br/imersao-react-4/assets/figurinhas/Figurinha_1.png'
+        }*/
+    ])
+
+    const router = useRouter()
+    //pega aquilo que vem depois do ? na URL
+    const usuarioLogado = router.query.user
+  // ./Sua lógica vai aqui
+
+    React.useEffect(() => {
+        supabase.from('mensagens')
+            .select("*")
+            .order('id', {ascending: false})
+            //desestruturação de dados {}
+            .then(({ data }) => {
+
+                setLista(data)
+
+            })
+    }, [])
+    
 
     function lidaMensagem(msg) {
         const mensagem = {
-            id: lista.length + 1,
-            de: 'marcosbauab',
+            //id: lista.length + 1,
+            de: usuarioLogado,
             texto: msg
         }
-        setLista([
-            //pega todos os elementos do array e põem junto
-            mensagem,
-            ...lista,
-        ])
+
+        supabase.from('mensagens')
+            .insert([
+                //objeto com os mesmos campos do supabase
+                mensagem
+            ])
+            .then(({ data }) => {
+                setLista([
+                    //pega todos os elementos do array e põem junto
+                    data[0],
+                    ...lista,
+                ])
+            })
+
 
         setMensagem('')
     }
@@ -94,6 +136,11 @@ export default function ChatPage() {
                                 color: appConfig.theme.colors.neutrals[200],
                             }}
                         />
+                        <Sticker onStickerClick={(sticker) => {
+                            //pegando pelo callback do próprio componente
+                            console.log('FORA DO COMP: ', sticker)
+                            lidaMensagem(':sticker:' + sticker)
+                        }}/>
                     </Box>
                 </Box>
             </Box>
@@ -124,7 +171,7 @@ function MessageList(props) {
         <Box
             tag="ul"
             styleSheet={{
-                overflow: 'hidden',
+                overflow: 'auto',
                 display: 'flex',
                 flexDirection: 'column-reverse',
                 flex: 1,
@@ -133,7 +180,7 @@ function MessageList(props) {
             }}
         >
             {props.mensagens.map((mensagem) => {
-                console.log(mensagem)
+                //console.log(mensagem)
                 return (
                     <Text
                         key={mensagem.id}
@@ -176,7 +223,18 @@ function MessageList(props) {
                                 {(new Date().toLocaleDateString())}
                             </Text>
                         </Box>
-                        {mensagem.texto}
+                        {/*checar se a mensagem começa com :sticker:, que mostra que ela não é só texto */}
+                        {mensagem.texto.startsWith(':sticker:') ? 
+
+                        (<Image src={mensagem.texto.replace(':sticker:','')} 
+                                styleSheet={{
+                                    maxWidth: '50vh'
+                                }}
+                        />) : 
+
+                        (mensagem.texto)
+                        }
+                        
                     </Text>
                 )
             })}
