@@ -3,16 +3,16 @@
     "theme": {
       "colors": {
         "primary": {
-          "050": "#E3F9E5",
-          "100": "#C1EAC5",
-          "200": "#A3D9A5",
-          "300": "#7BC47F",
-          "400": "#57AE5B",
-          "500": "#3F9142",
-          "600": "#2F8132",
-          "700": "#207227",
-          "800": "#0E5814",
-          "900": "#05400A"
+          "050": "#CCDCE0",
+          "100": "#A6C2C9",
+          "200": "#9ABAC1",
+          "300": "#81A8B1",
+          "400": "#749FAA",
+          "500": "#62929E",
+          "600": "#4E757E",
+          "700": "#466A72",
+          "800": "#365259",
+          "900": "#1F2F33"
         },
         "neutrals": {
           "000": "#FFFFFF",
@@ -31,6 +31,8 @@
       }
     },
     "stickers": [
+      "https://gifs.eco.br/wp-content/uploads/2021/09/sad-batman-gifs-3.gif",
+      "https://gifs.eco.br/wp-content/uploads/2021/09/gifs-de-gato-dancando-16.gif",
       "https://www.alura.com.br/imersao-react-4/assets/figurinhas/Figurinha_1.png",
       "https://www.alura.com.br/imersao-react-4/assets/figurinhas/Figurinha_2.png",
       "https://www.alura.com.br/imersao-react-4/assets/figurinhas/Figurinha_3.png",

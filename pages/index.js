@@ -2,8 +2,7 @@ import appConfig from '../config.json';
 import { Box, Button, Text, TextField, Image } from '@skynexui/components'; 
 import { useRouter } from 'next/router'
 import React from 'react';
-import imagem from '../public/usuarios.jpg'
-  
+import discImage from '../public/discord.png'  
 
 function Titulo(propriedades){
     const Tag = propriedades.tag
@@ -13,8 +12,8 @@ function Titulo(propriedades){
             <style jsx>{`
             ${Tag} {
                 color: ${appConfig.theme.colors.neutrals['050']};
-                height: 26px;
-                width: 237px;
+                height: 30px;
+                width: 100%;
             }
             `}</style>
         </>  
@@ -47,7 +46,7 @@ export default function PaginaInicial() {
         styleSheet={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           backgroundColor: appConfig.theme.colors.primary[500],
-          backgroundImage: 'url(https://virtualbackgrounds.site/wp-content/uploads/2020/08/the-matrix-digital-rain.jpg)',
+          backgroundImage: 'url(https://virtualbackgrounds.site/wp-content/uploads/2020/09/wall-e-access-to-an-axiom-life-pod-1024x576.jpeg)',
           backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'multiply',
         }}
       >
@@ -60,7 +59,7 @@ export default function PaginaInicial() {
               xs: 'column',
               sm: 'row',
             },
-            width: '100%', maxWidth: '700px',
+            width: '100%', maxWidth: '800px',
             borderRadius: '5px', padding: '32px', margin: '16px',
             boxShadow: '0 2px 10px 0 rgb(0 0 0 / 20%)',
             backgroundColor: appConfig.theme.colors.neutrals[700],
@@ -76,14 +75,24 @@ export default function PaginaInicial() {
             }}
             styleSheet={{
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-              width: { xs: '100%', sm: '50%' }, textAlign: 'center', marginBottom: '32px',
+              width: { xs: '100%', sm: username.length > 2 ? `50%` : `100%` }, textAlign: 'center', marginBottom: '32px',
             }}
           >
-            <Titulo tag="h2">Salve!</Titulo>
-            <Text variant="body3" styleSheet={{ marginBottom: '32px', color: appConfig.theme.colors.neutrals[300] }}>
+            <Image
+              styleSheet={{
+                display: 'block',
+                height: '60px',
+                borderRadius: '50%',
+                marginBottom: '16px',
+                width: '60px',
+                transform: 'rotate(90deg)',
+              }}
+              src={discImage.src}
+            />
+            <Titulo tag="h2">O contrário do Discord.</Titulo>
+            <Text variant="body3" styleSheet={{ marginBottom: '32px', fontSize: '1.2rem', color: '#62929E' }}>
               {appConfig.name}
             </Text>
-            {/*<a href="https://br.freepik.com/fotos-vetores-gratis/pessoas">Pessoas vetor criado por studiogstock - br.freepik.com</a>*/}
             <TextField
               onChange={function handler(event){
                   //valor da variável
@@ -101,7 +110,7 @@ export default function PaginaInicial() {
                 neutral: {
                   textColor: appConfig.theme.colors.neutrals[200],
                   mainColor: appConfig.theme.colors.neutrals[900],
-                  mainColorHighlight: appConfig.theme.colors.primary[500],
+                  mainColorHighlight: appConfig.theme.colors.primary['050'],
                   backgroundColor: appConfig.theme.colors.neutrals[800],
                 },
               }}
@@ -120,7 +129,7 @@ export default function PaginaInicial() {
 
             <Button
               type='submit'
-              label='Entrar'
+              label='Decolar'
               fullWidth
               buttonColors={{
                 contrastColor: appConfig.theme.colors.neutrals["000"],
@@ -128,6 +137,7 @@ export default function PaginaInicial() {
                 mainColorLight: appConfig.theme.colors.primary[400],
                 mainColorStrong: appConfig.theme.colors.primary[600],
               }}
+              disabled={username.length < 2 ? true : false}
             />
           </Box>
           {/* Formulário */}
@@ -136,7 +146,7 @@ export default function PaginaInicial() {
           {/* Photo Area */}
           <Box
             styleSheet={{
-              display: 'flex',
+              display: username.length > 2 ? `flex` : `none`,
               flexDirection: 'column',
               alignItems: 'center',
               maxWidth: '200px',
@@ -159,7 +169,7 @@ export default function PaginaInicial() {
                 marginBottom: '16px',
                 width: '250%',
               }}
-              src={username.length > 2 ? `https://github.com/${username}.png` : imagem.src}
+              src={`https://github.com/${username}.png`}
             />
             <Text
               variant="body4"
