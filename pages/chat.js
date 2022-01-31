@@ -26,13 +26,6 @@ export default function ChatPage() {
             de: 'marcosbauab',
             texto: ':sticker: https://www.alura.com.br/imersao-react-4/assets/figurinhas/Figurinha_1.png'
         }*/
-        /*supabase.from('mensagens')
-            .select("*")
-            .order('id', { ascending: false })
-            //desestruturação de dados {}
-            .then(({ data }) => {
-                return data
-            })*/
     )
 
 
@@ -145,9 +138,11 @@ export default function ChatPage() {
                                     setMensagem(event.target.value)
                                 }}
                                 onKeyPress={(e) => {
-                                    if (e.key === 'Enter') {
+                                    if (e.key === 'Enter' && mensagem != '') {
                                         e.preventDefault()
                                         lidaMensagem(mensagem)
+                                    } else if(e.key === 'Enter' && mensagem == ''){
+                                        e.preventDefault()
                                     }
                                 }}
                                 placeholder="Insira sua mensagem aqui..."
@@ -196,6 +191,9 @@ function Header() {
 }
 
 function MessageList(props) {
+    const router = useRouter()
+    //pega aquilo que vem depois do ? na URL, nesse caso, do user
+    const usuarioLogado = router.query.user
     return (
         <Box
             tag="ul"
@@ -214,14 +212,21 @@ function MessageList(props) {
                     <Text
                         key={mensagem.id}
                         tag="li"
-                        styleSheet={{
+                        styleSheet={mensagem.de == usuarioLogado ? ({
+                            borderRadius: '5px',
+                            padding: '6px',
+                            marginBottom: '12px',
+                            hover: {
+                                backgroundColor: appConfig.theme.colors.primary[900],
+                            }
+                        }): ({
                             borderRadius: '5px',
                             padding: '6px',
                             marginBottom: '12px',
                             hover: {
                                 backgroundColor: appConfig.theme.colors.neutrals[700],
                             }
-                        }}
+                        })}
                     >
                         <Box
                             styleSheet={{
