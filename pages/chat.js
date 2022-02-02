@@ -34,6 +34,10 @@ export default function ChatPage() {
     const usuarioLogado = router.query.user
     // ./Sua lógica vai aqui
 
+    if(usuarioLogado == ''){
+        router.push('/')
+    }
+
     React.useEffect(() => {
         setTimeout(() => {
             supabase.from('mensagens')
@@ -45,7 +49,7 @@ export default function ChatPage() {
                 })
 
             realTimeMsg((novaMensagem) => {
-                console.log("nova mensagem: ", novaMensagem)
+                //console.log("nova mensagem: ", novaMensagem)
                 setLista((valorAtual) => {
                     return [
                         novaMensagem,
