@@ -1,5 +1,5 @@
 import { Box, Text, TextField, Image, Button } from '@skynexui/components';
-import React from 'react';
+import React, { useState } from 'react';
 import appConfig from '../config.json';
 import { createClient } from '@supabase/supabase-js'
 import { useRouter } from 'next/router';
@@ -141,7 +141,7 @@ export default function ChatPage() {
                                     if (e.key === 'Enter' && mensagem != '') {
                                         e.preventDefault()
                                         lidaMensagem(mensagem)
-                                    } else if(e.key === 'Enter' && mensagem == ''){
+                                    } else if (e.key === 'Enter' && mensagem == '') {
                                         e.preventDefault()
                                     }
                                 }}
@@ -191,9 +191,14 @@ function Header() {
 }
 
 function MessageList(props) {
+
     const router = useRouter()
     //pega aquilo que vem depois do ? na URL, nesse caso, do user
     const usuarioLogado = router.query.user
+
+    let indice = -1
+    //console.log(props.mensagens)
+
     return (
         <Box
             tag="ul"
@@ -204,22 +209,31 @@ function MessageList(props) {
                 flex: 1,
                 color: appConfig.theme.colors.neutrals["000"],
                 marginBottom: '16px',
+                padding: '8px 10px 5px 5px',
             }}
         >
-            {props.mensagens.map((mensagem) => {
-                //console.log(mensagem)
+            {props.mensagens.map((mensagem, ind) => {
+
+                //indice = indice + 1
+                console.log(props.mensagens[ind].de)
+                //console.log(props.mensagens[i].de == props.mensagens[i+1].de)
                 return (
                     <Text
                         key={mensagem.id}
                         tag="li"
                         styleSheet={mensagem.de == usuarioLogado ? ({
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'flex-end',
+                            width: '100%',
                             borderRadius: '5px',
                             padding: '6px',
                             marginBottom: '12px',
                             hover: {
-                                backgroundColor: appConfig.theme.colors.primary[900],
+                                backgroundColor: appConfig.theme.colors.neutrals[700],
                             }
-                        }): ({
+                        }) : ({
+                            width: '100%',
                             borderRadius: '5px',
                             padding: '6px',
                             marginBottom: '12px',
@@ -228,35 +242,41 @@ function MessageList(props) {
                             }
                         })}
                     >
-                        <Box
-                            styleSheet={{
-                                marginBottom: '8px',
-                            }}
-                        >
-                            <Image
-                                styleSheet={{
-                                    width: '20px',
-                                    height: '20px',
-                                    borderRadius: '50%',
-                                    display: 'inline-block',
-                                    marginRight: '8px',
-                                }}
-                                src={`https://github.com/${mensagem.de}.png`}
-                            />
-                            <Text tag="strong">
-                                {mensagem.de}
-                            </Text>
-                            <Text
-                                styleSheet={{
-                                    fontSize: '10px',
-                                    marginLeft: '8px',
-                                    color: appConfig.theme.colors.neutrals[300],
-                                }}
-                                tag="span"
+                        {ind + 1 < props.mensagens.length && props.mensagens[ind].de == props.mensagens[ind + 1].de ?
+                            ('') : (<Box
+                                styleSheet={mensagem.de == usuarioLogado ? ({
+                                    marginBottom: '8px',
+                                    backgroundColor: appConfig.theme.colors.neutrals[800],
+                                    padding: '5px',
+                                    borderRadius: '5px',
+                                }) :
+                                    ({ marginBottom: '8px', })}
                             >
-                                {(new Date().toLocaleDateString())}
-                            </Text>
-                        </Box>
+                                <Image
+                                    styleSheet={{
+                                        width: '20px',
+                                        height: '20px',
+                                        borderRadius: '50%',
+                                        display: 'inline-block',
+                                        marginRight: '8px',
+                                    }}
+                                    src={`https://github.com/${mensagem.de}.png`}
+                                />
+                                <Text tag="strong">
+                                    {mensagem.de}
+                                </Text>
+                                <Text
+                                    styleSheet={{
+                                        fontSize: '10px',
+                                        marginLeft: '8px',
+                                        color: appConfig.theme.colors.neutrals[300],
+                                    }}
+                                    tag="span"
+                                >
+                                    {(new Date().toLocaleDateString())}
+                                </Text>
+                            </Box>)}
+
                         {/*checar se a mensagem começa com :sticker:, que mostra que ela não é só texto */}
                         {mensagem.texto.startsWith(':sticker:') ?
 

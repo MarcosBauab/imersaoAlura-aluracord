@@ -34,7 +34,7 @@ function GlobalStyle() {
     
         /* Track */
         ::-webkit-scrollbar-track {
-            background: ${appConfig.theme.colors.primary["200"]};
+            background: ${appConfig.theme.colors.neutrals["500"]};
             border-radius: 4px;
         }
      
