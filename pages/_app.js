@@ -58,6 +58,7 @@ export default function MyApp({ Component, pageProps }) {
         <meta property="og:title" content="Concord" key="title" />
         <meta property="og:description" content="Pare de discordar e Concord." />
         <meta property="og:url" content="https://concord-zeta.vercel.app/" />
+        <meta itemprop="image" content="/discord.png"></meta>
         <link rel="shortcut icon" href="/discord.png" />
         <meta name="theme-color" content={appConfig.theme.colors.primary['800']} />
       </Head>

@@ -2,7 +2,7 @@ import appConfig from '../config.json';
 import { Box, Button, Text, TextField, Image } from '@skynexui/components'; 
 import { useRouter } from 'next/router'
 import React from 'react';
-import discImage from '../public/discord.png'  
+import discImage from '../public/discord.png'
 
 function Titulo(propriedades){
     const Tag = propriedades.tag
@@ -14,6 +14,12 @@ function Titulo(propriedades){
                 color: ${appConfig.theme.colors.neutrals['050']};
                 height: 30px;
                 width: 100%;
+                
+            }
+            @media (max-width: 500px){
+              ${Tag}{
+                font-size: 1.2rem;
+              }  
             }
             `}</style>
         </>  
@@ -59,8 +65,8 @@ export default function PaginaInicial() {
               xs: 'column',
               sm: 'row',
             },
-            width: '100%', maxWidth: '800px',
-            borderRadius: '5px', padding: '32px', margin: '16px',
+            width: {xs: '80%',sm: '100%'}, maxWidth: '800px',
+            borderRadius: '5px', padding: '32px', margin: { xs: '10px', sm:'16px'},
             boxShadow: '0 2px 10px 0 rgb(0 0 0 / 20%)',
             backgroundColor: appConfig.theme.colors.neutrals[700],
           }}
@@ -90,7 +96,7 @@ export default function PaginaInicial() {
               src={discImage.src}
             />
             <Titulo tag="h2">O contrário do Discord.</Titulo>
-            <Text variant="body3" styleSheet={{ marginBottom: '32px', fontSize: '1.2rem', color: '#62929E' }}>
+            <Text variant="body3" styleSheet={{ marginBottom: '32px', fontSize: {xs: '1rem', sm:'1.2rem'}, color: '#62929E' }}>
               {appConfig.name}
             </Text>
             <TextField
@@ -150,14 +156,15 @@ export default function PaginaInicial() {
               flexDirection: 'column',
               alignItems: 'center',
               maxWidth: '200px',
-              padding: '16px',
+              width: { xs: '60%' },
+              padding: {xs:'10px', sm:'16px'},
               backgroundColor: appConfig.theme.colors.neutrals[800],
               border: '1px solid',
               borderColor: appConfig.theme.colors.neutrals[999],
               borderRadius: '10px',
-              flex: 1,
-              minHeight: '240px',
+              minHeight: { sm: '240px' },
               overflow: 'hidden',
+              height: { xs: '35vh' },
             }}
           >
             

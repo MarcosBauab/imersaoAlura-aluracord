@@ -1,16 +1,22 @@
 export default function Loading() {
     return (
         <>
-            <img src="/discord.png" />
+            <div>
+                <img src="/discord.png" />
+            </div>
             <style jsx>
                 {`
+                    div{
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                    }
                     img 
                     {
-                        position: fixed;
+                        
                         height: 30vh;
                         width: auto;
-                        left: 43.5%;
-                        top: 35vh;
+                        
                         -webkit-animation: giro ease-in-out 3s;
                         -webkit-animation-iteration-count:infinite;
                     }
@@ -22,6 +28,12 @@ export default function Loading() {
                              filter: opacity(100%);
                             }
                         100% {-webkit-transform:rotate(0deg);}
+                    }
+                    @media (max-width: 500px){
+                        img{
+                            height: 20vh;
+                            width: auto;
+                        }
                     }
                 `}
             </style>

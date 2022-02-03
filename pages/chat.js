@@ -58,7 +58,7 @@ export default function ChatPage() {
                 })
             })
 
-        }, 2000);
+        }, 1000);
     }, [])
 
 
@@ -104,12 +104,12 @@ export default function ChatPage() {
                         flexDirection: 'column',
                         flex: 1,
                         boxShadow: '0 2px 10px 0 rgb(0 0 0 / 20%)',
-                        borderRadius: '5px',
+                        borderRadius: { xs:'0', sm:'5px'},
                         backgroundColor: appConfig.theme.colors.neutrals[700],
-                        height: '100%',
-                        maxWidth: '95%',
-                        maxHeight: '95vh',
-                        padding: '32px',
+                        height: '100vh',
+                        maxWidth: {xs:'100%', sm: '95%'},
+                        maxHeight: {xs:'100vh',  sm: '95vh'},
+                        padding: {xs:'15px', sm: '32px'},
                     }}
                 >
                     <Header />
@@ -209,8 +209,9 @@ function MessageList(props) {
             styleSheet={{
                 overflow: 'auto',
                 display: 'flex',
+                width: '100%',
+                height: 'auto',
                 flexDirection: 'column-reverse',
-                flex: 1,
                 color: appConfig.theme.colors.neutrals["000"],
                 marginBottom: '16px',
                 padding: '8px 10px 5px 5px',
@@ -229,7 +230,7 @@ function MessageList(props) {
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'flex-end',
-                            width: '100%',
+                            width: {sm:'100%'},
                             borderRadius: '5px',
                             padding: '6px',
                             marginBottom: '12px',
@@ -237,7 +238,7 @@ function MessageList(props) {
                                 backgroundColor: appConfig.theme.colors.neutrals[700],
                             }
                         }) : ({
-                            width: '100%',
+                            width: {sm:'100%'},
                             borderRadius: '5px',
                             padding: '6px',
                             marginBottom: '12px',
@@ -286,7 +287,7 @@ function MessageList(props) {
 
                             (<Image src={mensagem.texto.replace(':sticker:', '')}
                                 styleSheet={{
-                                    maxWidth: '50vh'
+                                    width: {xs:'30vh', sm: '50vh'}
                                 }}
                             />) :
 
