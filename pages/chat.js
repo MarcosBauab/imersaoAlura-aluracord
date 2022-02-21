@@ -5,6 +5,7 @@ import { createClient } from '@supabase/supabase-js'
 import { useRouter } from 'next/router';
 import Sticker from '../src/components/Sticker'
 import Loading from '../src/components/Loading';
+import Delete from '../src/components/Delete';
 
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzQxNDgwOSwiZXhwIjoxOTU4OTkwODA5fQ.9etS6c0i8z_qOgBcNIBBD5E9UmiXHYpTSzEanR6UMks'
 const SUPABASE_URL = 'https://mdgilhijonzeeitkftgw.supabase.co'
@@ -27,7 +28,6 @@ export default function ChatPage() {
             texto: ':sticker: https://www.alura.com.br/imersao-react-4/assets/figurinhas/Figurinha_1.png'
         }*/
     )
-
 
     const router = useRouter()
     //pega aquilo que vem depois do ? na URL, nesse caso, do user
@@ -127,7 +127,17 @@ export default function ChatPage() {
                     >
 
 
-                        <MessageList mensagens={lista} />
+                        <MessageList mensagens={lista} updateLista={() => {
+                            
+                            supabase.from('mensagens')
+                            .select("*")
+                            .order('id', { ascending: false })
+                            //desestruturação de dados {}
+                            .then(({ data }) => {
+                                setLista(data)
+                            })
+                            
+                        }}/>
 
                         <Box
                             as="form"
@@ -199,9 +209,10 @@ function MessageList(props) {
     const router = useRouter()
     //pega aquilo que vem depois do ? na URL, nesse caso, do user
     const usuarioLogado = router.query.user
+    
+    const [indiceMsg, setIndiceMsg] = useState()
 
-    let indice = -1
-    //console.log(props.mensagens)
+    const [visivel, setVisivel] = useState(false)
 
     return (
         <Box
@@ -219,82 +230,103 @@ function MessageList(props) {
         >
             {props.mensagens.map((mensagem, ind) => {
 
-                //indice = indice + 1
-                console.log(props.mensagens[ind].de)
-                //console.log(props.mensagens[i].de == props.mensagens[i+1].de)
                 return (
-                    <Text
-                        key={mensagem.id}
-                        tag="li"
-                        styleSheet={mensagem.de == usuarioLogado ? ({
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'flex-end',
-                            width: {sm:'100%'},
-                            borderRadius: '5px',
-                            padding: '6px',
-                            marginBottom: '12px',
-                            hover: {
-                                backgroundColor: appConfig.theme.colors.neutrals[700],
-                            }
-                        }) : ({
-                            width: {sm:'100%'},
-                            borderRadius: '5px',
-                            padding: '6px',
-                            marginBottom: '12px',
-                            hover: {
-                                backgroundColor: appConfig.theme.colors.neutrals[700],
-                            }
-                        })}
-                    >
-                        {ind + 1 < props.mensagens.length && props.mensagens[ind].de == props.mensagens[ind + 1].de ?
-                            ('') : (<Box
-                                styleSheet={mensagem.de == usuarioLogado ? ({
-                                    marginBottom: '8px',
-                                    backgroundColor: appConfig.theme.colors.neutrals[800],
-                                    padding: '5px',
-                                    borderRadius: '5px',
-                                }) :
-                                    ({ marginBottom: '8px', })}
-                            >
-                                <Image
+                    <div onMouseEnter={() => {
+                            setVisivel(true)
+                            setIndiceMsg(ind)
+                        }} onMouseLeave={() => {
+                                setVisivel(false)
+                            }}>
+                        <Text
+                            key={mensagem.id}
+                            tag="li"
+                            styleSheet={mensagem.de == usuarioLogado ? ({
+                                position: 'relative',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'flex-end',
+                                width: {sm:'100%'},
+                                borderRadius: '5px',
+                                padding: '6px',
+                                marginBottom: '12px',
+                                hover: {
+                                    backgroundColor: appConfig.theme.colors.neutrals[700],
+                                },
+                                transition: '.2s',
+                            }) : ({
+                                width: {sm:'100%'},
+                                borderRadius: '5px',
+                                padding: '6px',
+                                marginBottom: '12px',
+                                hover: {                                   
+                                    backgroundColor: appConfig.theme.colors.neutrals[700],
+                                },
+                                transition: '.2s'
+                            })}
+                        >
+
+                            {ind + 1 < props.mensagens.length && props.mensagens[ind].de == props.mensagens[ind + 1].de ?
+                                ('') : (<Box
+                                    styleSheet={mensagem.de == usuarioLogado ? ({
+                                        marginBottom: '8px',
+                                        backgroundColor: appConfig.theme.colors.neutrals[800],
+                                        padding: '5px',
+                                        borderRadius: '5px',
+                                    }) :
+                                        ({ marginBottom: '8px', })}
+                                >                                    
+                                    <Image
+                                        styleSheet={{
+                                            width: '20px',
+                                            height: '20px',
+                                            borderRadius: '50%',
+                                            display: 'inline-block',
+                                            marginRight: '8px',
+                                        }}
+                                        src={`https://github.com/${mensagem.de}.png`}
+                                    />
+                                    <Text tag="strong">
+                                        {mensagem.de}
+                                    </Text>
+                                    <Text
+                                        styleSheet={{
+                                            fontSize: '10px',
+                                            marginLeft: '8px',
+                                            color: appConfig.theme.colors.neutrals[300],
+                                        }}
+                                        tag="span"
+                                    >
+                                        {(new Date().toLocaleDateString())}
+                                    </Text>
+                                </Box>)}
+                            
+                            {/*checar se a mensagem começa com :sticker:, que mostra que ela não é só texto */}
+                            {mensagem.texto.startsWith(':sticker:') ?
+
+                                (<Image src={mensagem.texto.replace(':sticker:', '')}
                                     styleSheet={{
-                                        width: '20px',
-                                        height: '20px',
-                                        borderRadius: '50%',
-                                        display: 'inline-block',
-                                        marginRight: '8px',
+                                        width: {xs:'30vh', sm: '50vh'}
                                     }}
-                                    src={`https://github.com/${mensagem.de}.png`}
-                                />
-                                <Text tag="strong">
-                                    {mensagem.de}
-                                </Text>
-                                <Text
-                                    styleSheet={{
-                                        fontSize: '10px',
-                                        marginLeft: '8px',
-                                        color: appConfig.theme.colors.neutrals[300],
-                                    }}
-                                    tag="span"
-                                >
-                                    {(new Date().toLocaleDateString())}
-                                </Text>
-                            </Box>)}
-
-                        {/*checar se a mensagem começa com :sticker:, que mostra que ela não é só texto */}
-                        {mensagem.texto.startsWith(':sticker:') ?
-
-                            (<Image src={mensagem.texto.replace(':sticker:', '')}
-                                styleSheet={{
-                                    width: {xs:'30vh', sm: '50vh'}
-                                }}
-                            />) :
-
-                            (mensagem.texto)
-                        }
-
-                    </Text>
+                                />) :
+                                
+                                (mensagem.texto)
+                            }
+                            {mensagem.de == usuarioLogado && visivel && ind == indiceMsg ? 
+                            <Delete idMensagem={mensagem.id} onDelete={(chave) => {
+                                let res = confirm('Deseja excluir essa mensagem ?')
+                                if(res == true){
+                                    supabase
+                                    .from('mensagens')
+                                    .delete()
+                                    .match({ id: chave })
+                                    .then(() => {
+                                        props.updateLista()
+                                    })
+                                }
+                                
+                            }}/> : ('')}    
+                        </Text>
+                    </div>
                 )
             })}
 
