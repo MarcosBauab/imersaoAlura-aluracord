@@ -15,7 +15,7 @@ Projeto feito na imersão da Alura, cópia de um Discord em React pra Web!
 3. React + Next para melhor SEO e componentes reativos ao usuário
 4. Supabase como banco de dados dinâmico
 
-**Extras:**
+**Funcionalidades extra :**
 
 * Mensagens à direita se você mandou elas
 * Tela de loading com animação
